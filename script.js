@@ -34,6 +34,10 @@ function renderSearchHistory() {
 
 // Function to update search history
 function updateSearchHistory(cityName) {
+    // If the city already exists in the list remove it
+    if (cityList.includes(cityName)) {
+        cityList.splice(cityList.indexOf(cityName), 1);
+    }
     // Add that city to the beginning of the list
     var listLength = cityList.unshift(cityName);
     // If the list has more than 8 remove the oldest one
@@ -65,7 +69,7 @@ function renderWeather(cityName) {
         $("#wind-speed").text("Wind speed: " + response.wind.speed + " MPH");
         $("#uv-index").text("UV Index: ");
         // Update the search history
-        updateSearchHistory(cityName);
+        updateSearchHistory(response.name);
     }).catch(function() {
         // If unsuccessful
         // console.log("invalid city");

@@ -75,3 +75,11 @@ main {
     content: "";
     clear: both;
 }
+
+/* Todays weather */
+.weather-today {
+    border: 1px #eeeeee solid;
+    border-radius: 4px;
+    padding: 12px;
+    line-height: 250%;
+}
