@@ -111,3 +111,24 @@ main {
 .uv-extreme {
     background-color: #d83484;
 }
+
+/* 5 day forecast area */
+.weather-forecast {
+    display: none;
+    padding-top: 16px;
+}
+
+.forecast-days {
+    padding-top: 4px;
+}
+
+.forecast-day {
+    display: inline-block;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 8px;
+    padding: 12px 24px 12px 8px;
+    line-height: 200%;
+}

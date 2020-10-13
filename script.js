@@ -94,6 +94,30 @@ function renderWeather(cityName) {
             // Give it color class based on its value
             uvEl.addClass("uv " + uvCondition(response.current.uvi));
             $("#uv-index").append(uvEl);
+
+            // Display the 5 day forecast
+            $(".weather-forecast").attr("style", "display: block");
+            // Add the days to the forecast
+            // Clear old forecast
+            $(".forecast-days").empty(); 
+            // For each of the 5 days
+            // Start at 1 (tomorrow) instead of 0 (today) 
+            for (let i = 1; i < 6; i++) {
+                divEl = $('<div class="forecast-day">');
+                    // Add a date
+                    var dateEl= $("<h3>").text(moment().add(i, 'days').format('l'));
+                    divEl.append(dateEl);
+                    // Add an icon
+                    var iconEl = $('<img>').attr("src", "http://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon + ".png");
+                    divEl.append(iconEl);
+                    // Add temperature
+                    var tempEl = $("<p>").text("Temp: " + response.daily[i].temp.day + "\xb0F");
+                    divEl.append(tempEl);
+                    // Add humidity
+                    var humidityEl = $("<p>").text("Humidity: " + response.daily[i].humidity + "%");
+                    divEl.append(humidityEl);
+                $(".forecast-days").append(divEl);             
+            }
         });
 
 
@@ -108,7 +132,7 @@ function renderWeather(cityName) {
         $("#humidity").empty();
         $("#wind-speed").empty();
         $("#uv-index").empty();
-        $(".weather-forecast").empty();
+        $(".weather-forecast").attr("style", "display: none");
     });
 }
 
