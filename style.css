@@ -15,10 +15,12 @@ header {
     padding: 12px;
 }
 
+/* Aside column */
 aside {
     width: 30%;
     background-color: #f8f9fa;
     padding: 8px;
+    float: left;
 }
 
 /* Label */
@@ -59,4 +61,17 @@ aside label {
 .search-item {
     border: 1px #eeeeee solid;
     padding: 12px;
+    cursor: default;
+}
+
+/* Main column */
+main {
+    width: 70%;
+    float: left;
+    padding: 16px;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
 }

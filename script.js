@@ -5,7 +5,7 @@ var cityList = JSON.parse(localStorage.getItem("city-list"));
 if (!cityList) {
     cityList = [];
 }
-console.log(cityList);
+// console.log(cityList);
 
 // Function to render search history
 function renderSearchHistory() {
@@ -17,17 +17,25 @@ function renderSearchHistory() {
         var liEl = $('<li class="search-item">').text(city);
         $("#search-history").append(liEl);
     });
+
+    // When a city from the search history is clicked
+    $(".search-item").click(function(event) {
+        // Prevent any default action
+        event.preventDefault();
+
+        // console.log("list item clicked");
+        // Get city name
+        var userCity = $(this).text();
+
+        // Display the weather for the city
+        renderWeather(userCity);
+    });
 }
 
-// When search button is clicked
-$("#search-button").click(function(event) {
-    // Prevent form submission from refreshing the page
-    event.preventDefault();
-
-    // Get city name from text input
-    var userCity = $("#city-name").val();
+// Function to update search history
+function updateSearchHistory(cityName) {
     // Add that city to the beginning of the list
-    var listLength = cityList.unshift(userCity);
+    var listLength = cityList.unshift(cityName);
     // If the list has more than 8 remove the oldest one
     if (listLength > 8) {
         cityList.pop();        
@@ -37,8 +45,49 @@ $("#search-button").click(function(event) {
     
     // Display search history
     renderSearchHistory();
+}
 
-    // console.log(newListSize);
+// Function that displays weather for a city
+function renderWeather(cityName) {
+    // Query URL
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?appid=de67b8db375cf19f0a90a7d7e6edfda6&units=imperial&q=" + cityName;
+    // Query
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function(response) {
+        // If successful
+        // console.log(response);
+        // Display info
+        $("#city").text(response.name);
+        $("#temperature").text("Temperature: " + response.main.temp + "\xb0F");
+        $("#humidity").text("Humidity: " + response.main.humidity + "%");
+        $("#wind-speed").text("Wind speed: " + response.wind.speed + " MPH");
+        $("#uv-index").text("UV Index: ");
+        // Update the search history
+        updateSearchHistory(cityName);
+    }).catch(function() {
+        // If unsuccessful
+        // console.log("invalid city");
+        // Display error
+        $("#city").text("Invalid city name");
+        $("#temperature").text("");
+        $("#humidity").text("");
+        $("#wind-speed").text("");
+        $("#uv-index").text("");
+    });
+}
+
+// When search button is clicked
+$("#search-button").click(function(event) {
+    // Prevent form submission from refreshing the page
+    event.preventDefault();
+
+    // Get city name from text input
+    var userCity = $("#city-name").val();
+
+    // Display the weather for the city
+    renderWeather(userCity);
 });
 
 // Code flow
