@@ -83,3 +83,31 @@ main {
     padding: 12px;
     line-height: 250%;
 }
+
+/* Weathe icons */
+.weather-icon {
+    height: 36px;
+    width: 36px;
+}
+
+/* Classes for uv index */
+.uv {
+    padding: 4px 8px;
+    border-radius: 8px;
+    color: white;
+}
+.uv-low {
+    background-color: #83c88b;
+}
+.uv-moderate {
+    background-color: #ffdc01;
+}
+.uv-high {
+    background-color: #f89c1c;
+}
+.uv-vhigh  {
+    background-color: #ee1d23;
+}
+.uv-extreme {
+    background-color: #d83484;
+}

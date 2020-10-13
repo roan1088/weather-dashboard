@@ -7,28 +7,35 @@ if (!cityList) {
 }
 // console.log(cityList);
 
+// Function that returns uv condition based on its value
+// Conditions from https://www.epa.gov/sites/production/files/documents/uviguide.pdf 
+function uvCondition(value) {
+    if (value < 2.5) {
+        return "uv-low";
+    }
+    else if (value < 5.5) {
+        return "uv-moderate";
+    }
+    else if (value < 7.5) {
+        return "uv-high";
+    }
+    else if (value < 10.5) {
+        return "uv-vhigh";
+    }
+    else {
+        return "uv-extreme";
+    }    
+}
+
 // Function to render search history
 function renderSearchHistory() {
     // Clear search history area
-    $("#search-history").html("");
+    $("#search-history").empty();
     // For each city in the list
     $.each(cityList, function(index, city) {
         // Create a list item
         var liEl = $('<li class="search-item">').text(city);
         $("#search-history").append(liEl);
-    });
-
-    // When a city from the search history is clicked
-    $(".search-item").click(function(event) {
-        // Prevent any default action
-        event.preventDefault();
-
-        // console.log("list item clicked");
-        // Get city name
-        var userCity = $(this).text();
-
-        // Display the weather for the city
-        renderWeather(userCity);
     });
 }
 
@@ -61,13 +68,35 @@ function renderWeather(cityName) {
         method: "GET"
     }).then(function(response) {
         // If successful
-        // console.log(response);
-        // Display info
-        $("#city").text(response.name);
+        console.log(response);
+        // Display todays info
+        $("#city").text(response.name + " (" + moment().format('l') + ")");
+            // Icon of current weather
+            var iconEl = $('<img class="weather-icon">').attr("src", "http://openweathermap.org/img/wn/" + response.weather[0].icon + ".png");
+            $("#city").append(iconEl);
         $("#temperature").text("Temperature: " + response.main.temp + "\xb0F");
         $("#humidity").text("Humidity: " + response.main.humidity + "%");
         $("#wind-speed").text("Wind speed: " + response.wind.speed + " MPH");
         $("#uv-index").text("UV Index: ");
+
+        // Display 5 day forecast returned by One Call API using lat and lon
+        var oneCallURL = "https://api.openweathermap.org/data/2.5/onecall?appid=de67b8db375cf19f0a90a7d7e6edfda6&units=imperial&lat="
+        + response.coord.lat + "&lon=" + response.coord.lon;
+
+        // One Call API query
+        $.ajax({
+            url: oneCallURL,
+            method: "GET"
+        }).then(function(response) {
+            console.log(response);
+            // Display the uv index
+            var uvEl = $("<span>").text(response.current.uvi);
+            // Give it color class based on its value
+            uvEl.addClass("uv " + uvCondition(response.current.uvi));
+            $("#uv-index").append(uvEl);
+        });
+
+
         // Update the search history
         updateSearchHistory(response.name);
     }).catch(function() {
@@ -75,10 +104,11 @@ function renderWeather(cityName) {
         // console.log("invalid city");
         // Display error
         $("#city").text("Invalid city name");
-        $("#temperature").text("");
-        $("#humidity").text("");
-        $("#wind-speed").text("");
-        $("#uv-index").text("");
+        $("#temperature").empty();
+        $("#humidity").empty();
+        $("#wind-speed").empty();
+        $("#uv-index").empty();
+        $(".weather-forecast").empty();
     });
 }
 
@@ -89,6 +119,19 @@ $("#search-button").click(function(event) {
 
     // Get city name from text input
     var userCity = $("#city-name").val();
+
+    // Display the weather for the city
+    renderWeather(userCity);
+});
+
+// When a city from the search history is clicked
+$(document).on("click", ".search-item", function(event) {
+    // Prevent any default action
+    event.preventDefault();
+
+    // console.log("list item clicked");
+    // Get city name
+    var userCity = $(this).text();
 
     // Display the weather for the city
     renderWeather(userCity);
