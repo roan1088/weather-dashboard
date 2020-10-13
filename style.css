@@ -21,16 +21,19 @@ aside {
     padding: 8px;
 }
 
+/* Label */
 aside label {
     font-size: 18px;    
 }
 
+/* Input area */
 #city-name {
     width: 70%;
     margin-top: 4px;
     padding: 8px;
 }
 
+/* Search button */
 #search-button {
     padding: 10px;
     background-color: #007bff;
@@ -41,4 +44,19 @@ aside label {
 
 #search-button:focus {
     outline: none;
+}
+
+/* Search history list */
+#search-history {
+    list-style: none;
+    width: 90%;
+    border: 1px #eeeeee solid;
+    border-radius: 8px;
+    margin: 12px 0;
+}
+
+/* list item */
+.search-item {
+    border: 1px #eeeeee solid;
+    padding: 12px;
 }
